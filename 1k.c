@@ -1,9 +1,21 @@
+// //////////////////////
+//
+// GL1k - Is a small piece of C code created by Steven batchelor-Manning demonstating the
+//      posibility to achieve Opengl Rendering within the confinds of a 1kb exe.
+// https://github.com/sbatman/Cranium.git
+//
+// This work is covered under the Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) licence.
+// More information can be found about the liecence here http://creativecommons.org/licenses/by-sa/3.0/
+// If you wish to discuss the licencing terms please contact Steven Batchelor-Manning
+//
+// //////////////////////
+
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #include <gl/gl.h>
-#define WWIDTH 640
-#define WHEIGHT 480
+#define WWIDTH 800
+#define WHEIGHT 600
 #define start 0.005
 #define end 0.0000005
 #define one 1.0
@@ -58,8 +70,8 @@ int APIENTRY WinMainCRTStartup(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPS
 	{
 		if (zoom < end)Running = -one;
 		if (zoom > start)Running = one;
-		PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE);
-		if (msg.message == WM_QUIT)	break;
+		PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
+		if (msg.message == WM_QUIT || msg.message == WM_CLOSE) break;
 		zoom *= (one - (Running*start));
 		glBegin(GL_POINTS);
 		int maxIt = 128;

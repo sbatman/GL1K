@@ -99,11 +99,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;msvcrt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /ORDERTRIES:500 /HASHTRIES:500 /TRUNCATEFLOATS:20 /NOINITIALIZERS /HASHSIZE:10 /LARGEADDRESSAWARE:NO /UNSAFEIMPORT %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /ORDERTRIES:500 /HASHTRIES:500 /TRUNCATEFLOATS:24 /NOINITIALIZERS /HASHSIZE:10 /LARGEADDRESSAWARE:NO /UNSAFEIMPORT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="1k.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
