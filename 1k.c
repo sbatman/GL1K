@@ -2,12 +2,15 @@
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
 #include <gl/gl.h>
-static const int  WWIDTH = 800;
-static const int  WHEIGHT = 600;
-static const LPCWSTR Title = "h";
-static char Running;
+#define WWIDTH 640
+#define WHEIGHT 480
+#define start 0.005
+#define end 0.000005
+#define one 1.0
+static double Running;
 static HDC g_HDC;
 static HGLRC hRC;
+
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -22,13 +25,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			hRC = wglCreateContext(g_HDC);
 			wglMakeCurrent(g_HDC, hRC);
 			glViewport(0, 0, WWIDTH, WHEIGHT);
-			glMatrixMode(GL_PROJECTION);
-			glOrtho(0, WWIDTH, 0, WHEIGHT, -1.0, 1.0);
-			glPointSize(3);
-			return 0;
+			glOrtho(0, WWIDTH, 0, WHEIGHT, -one, one);
+			glPointSize(2);
 			break;
 		case WM_CLOSE:
 			PostQuitMessage(0);
+			return 0;
 			break;
 	}
 	return (DefWindowProc(hwnd, message, wParam, lParam));
@@ -39,53 +41,51 @@ int APIENTRY WinMainCRTStartup(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPS
 	WNDCLASSEX windowClass;
 	HWND    hwnd;
 	MSG             msg;
-	Running = 1;
+	Running = one;
 	windowClass.cbSize = sizeof(WNDCLASSEX);
 	windowClass.lpfnWndProc = WndProc;
+	windowClass.style =  CS_HREDRAW | CS_VREDRAW;
 	windowClass.cbClsExtra = 0;
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = hInstance;
 	windowClass.hbrBackground = NULL;
-	windowClass.lpszClassName = Title;
+	windowClass.lpszClassName = "h";
 	RegisterClassEx(&windowClass);
-	hwnd = CreateWindowEx(NULL, Title, Title, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WWIDTH, WHEIGHT, NULL, NULL, hInstance, NULL);
+	hwnd = CreateWindowEx(NULL, "h", "h", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WWIDTH, WHEIGHT, NULL, NULL, hInstance, NULL);
 	ShowWindow(hwnd, SW_SHOW);
-	double zoom = 0.0002f;
+	double zoom = start;
 	while (Running != 0)
 	{
+		if (zoom < end)Running = -one;
+		if (zoom > start)Running = one;
 		PeekMessage(&msg, hwnd, NULL, NULL, PM_REMOVE);
-		if (msg.message == WM_QUIT)	Running = 0;
-		else
-		{
-			glBegin(GL_POINTS);
-			int maxIt = 255;
-			for (int iy = 0; iy < WHEIGHT; iy+=5) for (int ix = 0; ix < WWIDTH; ix+=5)
+		if (msg.message == WM_QUIT)	break;
+		zoom *= (one - (Running*start));
+		glBegin(GL_POINTS);
+		int maxIt = 64;
+		for (double iy = 0; iy < WHEIGHT; iy++) for (double ix = 0; ix < WWIDTH; ix++)
+			{
+				double cx = 0.2749 + ix * zoom;
+				double cy = 0.4841 + iy * zoom;
+				double x = 0;
+				double y = 0;
+				int it;
+				for (it = 0; it<maxIt; it++)
 				{
-					double cx = 0.274f + ix * zoom;
-					double cy = 0.482f + iy * zoom;
-					double x = 0;
-					double y = 0;
-					int it;
-					for (it = 0; it<maxIt; it++)
-					{
-						double x2 = x*x;
-						double y2 = y*y;
-						if (x2 + y2 > 4.0f) break;
-						double twoxy = 2.0*x*y;
-						x = x2 - y2 + cx;
-						y = twoxy + cy;
-					}
-					if (it > 3)
-					{
-						glColor3b(it, 0, 0);
-						glVertex2d(ix, iy);
-					}
+					double x2 = x*x;
+					double y2 = y*y;
+					if (x2 + y2 > 4.0) break;
+					double twoxy = 2.0*x*y;
+					x = x2 - y2 + cx;
+					y = twoxy + cy;
 				}
-			glEnd();
-			SwapBuffers(g_HDC);
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+				glColor3b(it * 4,( it * 4) - 64, (it * 4) - 128);
+				glVertex2d(ix, iy);
+			}
+		glEnd();
+		SwapBuffers(g_HDC);
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 	ExitProcess(0);
 }
