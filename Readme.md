@@ -3,7 +3,7 @@ GL1k
 
 Description
 --------
-This is a small piece of C code created by Steven batchelor-Manning demonstating the posibility to achieve Opengl Rendering within the confinds of a 1kb exe.
+This is a small piece of C code created by Steven batchelor-Manning demonstating the posibility to achieve Opengl Rendering within the confinds of a 1kb exe. This project includes a copy of http://www.crinkler.net/ (renamed to Link.exe) which is a vital part of the size reduction.
 
 Team
 --------
