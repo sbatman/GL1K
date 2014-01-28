@@ -99,7 +99,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libc;msvcrt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /ORDERTRIES:500 /HASHTRIES:500 /TRUNCATEFLOATS:18 /NOINITIALIZERS /HASHSIZE:10 /LARGEADDRESSAWARE:NO /UNSAFEIMPORT %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /ORDERTRIES:500 /HASHTRIES:500 /TRUNCATEFLOATS:20 /NOINITIALIZERS /HASHSIZE:10 /LARGEADDRESSAWARE:NO /UNSAFEIMPORT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
