@@ -29,9 +29,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case WM_CLOSE:
 			PostQuitMessage(0);
-			return 0;
-			break;
-		default:
 			break;
 	}
 	return (DefWindowProc(hwnd, message, wParam, lParam));
@@ -44,19 +41,15 @@ int APIENTRY WinMainCRTStartup(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPS
 	MSG             msg;
 	Running = 1;
 	windowClass.cbSize = sizeof(WNDCLASSEX);
-	windowClass.style = CS_HREDRAW | CS_VREDRAW;
 	windowClass.lpfnWndProc = WndProc;
 	windowClass.cbClsExtra = 0;
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = hInstance;
 	windowClass.hbrBackground = NULL;
-	windowClass.lpszMenuName = NULL;
 	windowClass.lpszClassName = Title;
-	windowClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
 	RegisterClassEx(&windowClass);
 	hwnd = CreateWindowEx(NULL, Title, Title, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WWIDTH, WHEIGHT, NULL, NULL, hInstance, NULL);
 	ShowWindow(hwnd, SW_SHOW);
-	UpdateWindow(hwnd);
 	double zoom = 0.0002f;
 	while (Running != 0)
 	{
