@@ -16,8 +16,6 @@
 #include <gl/gl.h>
 #define WWIDTH 800
 #define WHEIGHT 600
-#define start 0.005
-#define end 0.0000005
 #define one 1.0
 static double Running;
 static HDC g_HDC;
@@ -65,36 +63,11 @@ int APIENTRY WinMainCRTStartup(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPS
 	RegisterClassEx(&windowClass);
 	hwnd = CreateWindowEx(0, "h", "h", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, WWIDTH, WHEIGHT, 0, 0, hInstance, 0);
 	ShowWindow(hwnd, SW_SHOW);
-	double zoom = start;
 	while (Running != 0)
 	{
-		if (zoom < end)Running = -one;
-		if (zoom > start)Running = one;
 		PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
 		if (msg.message == WM_QUIT || msg.message == WM_CLOSE) break;
-		zoom *= (one - (Running*start));
-		glBegin(GL_POINTS);
-		int maxIt = 128;
-		for (double iy = 0; iy < WHEIGHT; iy+=3) for (double ix = 0; ix < WWIDTH; ix+=3)
-			{
-				double targetX = 0.27499 + ix * zoom;
-				double targetY = 0.48419 + iy * zoom;
-				double x = 0;
-				double y = 0;
-				int it;
-				for (it = 0; it<maxIt; it++)
-				{
-					double x2 = x*x;
-					double y2 = y*y;
-					if (x2 + y2 > 4.0) break;
-					double twoxy = 2.0*x*y;
-					x = x2 - y2 + targetX;
-					y = twoxy + targetY;
-				}
-				glColor3b(it * 2,( it * 2) - 64, (it * 2) - 128);
-				glVertex2d(ix, iy);
-			}
-		glEnd();
+		//Drawing code here
 		SwapBuffers(g_HDC);
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
